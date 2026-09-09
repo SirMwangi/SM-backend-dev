@@ -10,7 +10,7 @@ CREATE TABLE accounts (
         CHECK (char_length(trim(account_name)) BETWEEN 1 AND 150),
         
     institution TEXT NOT NULL 
-        CHECK (institution IN ('KCB', 'NCBA', 'STANBIC', 'COOPERATIVE')),
+        CHECK (institution IN ('KCB', 'NCBA', 'STANBIC', 'EQUITY')),
         
     account_type TEXT NOT NULL 
         CHECK (account_type IN ('DEPOSIT', 'CREDIT')),
