@@ -12,7 +12,7 @@ CREATE TABLE transactions (
     -- Granular tracking
     counterparty TEXT,
     payment_method TEXT,
-    category TEXT NOT NULL DEFAULT 'UNCATEGORIZED',
+    category_id UUID REFERENCES categories(id),
     
     -- Status updated to match the frontend spec requirements
     status TEXT NOT NULL DEFAULT 'PENDING' 
@@ -34,3 +34,4 @@ CREATE TABLE transactions (
 -- Indexes for lightning-fast frontend dashboard queries
 CREATE INDEX idx_transactions_account_date ON transactions(account_id, transaction_date DESC);
 CREATE INDEX idx_transactions_status ON transactions(status);
+CREATE INDEX idx_transactions_category ON transactions(category_id);

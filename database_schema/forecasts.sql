@@ -1,6 +1,6 @@
 CREATE TABLE forecasts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id),
     
     -- The future date being predicted
     target_date DATE NOT NULL,

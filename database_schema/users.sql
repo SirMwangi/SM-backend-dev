@@ -48,5 +48,12 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     
-    CONSTRAINT users_email_unique UNIQUE (email_address)
+    -- Soft-delete: all FKs use RESTRICT, so hard deletion is blocked by design.
+    -- The application marks users as deleted here instead.
+    deleted_at TIMESTAMPTZ
 );
+
+-- Email must be unique among active (non-deleted) users,
+-- but a deleted user's email can be reclaimed.
+CREATE UNIQUE INDEX users_email_active_unique 
+    ON users(email_address) WHERE deleted_at IS NULL;

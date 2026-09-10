@@ -37,8 +37,8 @@ CREATE INDEX idx_budgets_owner ON budgets(owner_id);
 
 CREATE TABLE budget_categories (
     budget_id UUID NOT NULL REFERENCES budgets(id) ON DELETE CASCADE,
-    category TEXT NOT NULL,
-    PRIMARY KEY (budget_id, category)
+    category_id UUID NOT NULL REFERENCES categories(id),
+    PRIMARY KEY (budget_id, category_id)
 );
 
 CREATE TABLE budget_accounts (

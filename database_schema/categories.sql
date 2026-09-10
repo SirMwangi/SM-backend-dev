@@ -1,13 +1,13 @@
 CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id),
     
     name TEXT NOT NULL,
     category_type TEXT NOT NULL 
         CONSTRAINT chk_category_type CHECK (category_type IN ('INCOME', 'EXPENSE', 'TRANSFER')),
         
     -- Self-referencing foreign key for nested sub-categories
-    parent_id UUID REFERENCES categories(id) ON DELETE CASCADE,
+    parent_id UUID REFERENCES categories(id),
     
     -- UI Metadata for the frontend to render custom badges
     icon_name TEXT, 

@@ -1,6 +1,6 @@
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id),
     
     -- Categorization
     event_type TEXT NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE notifications (
 
 CREATE TABLE notification_preferences (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id),
     
     -- Specific event (e.g., 'BUDGET_EXCEEDED', 'SECURITY_ALERT') or 'ALL' for defaults
     event_type TEXT NOT NULL,
