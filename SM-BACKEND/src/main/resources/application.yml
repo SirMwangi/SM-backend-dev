@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8080}
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: SM-BACKEND
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://aws-0-eu-west-2.pooler.supabase.com:6543/postgres}
+    username: ${DB_USER:postgres.lhizwzqkpshwmpqlbffm}
+    password: ${DB_PASSWORD:YXF0Rod6MDJdsUBW}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect

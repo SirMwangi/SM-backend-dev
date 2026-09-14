@@ -31,6 +31,9 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber;
+
     /**
      * Default no-argument constructor required by JPA.
      */
@@ -45,8 +48,21 @@ public class User {
      * @param passwordHash Securely hashed password
      */
     public User(String name, String email, String passwordHash) {
+        this(name, email, null, passwordHash);
+    }
+
+    /**
+     * Parameterized constructor for creating a new User with credentials and phone number.
+     *
+     * @param name         User's display name
+     * @param email        User's unique email address
+     * @param phoneNumber  User's contact phone number
+     * @param passwordHash Securely hashed password
+     */
+    public User(String name, String email, String phoneNumber, String passwordHash) {
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.passwordHash = passwordHash;
     }
 
@@ -59,9 +75,23 @@ public class User {
      * @param passwordHash Securely hashed password
      */
     public User(UUID id, String name, String email, String passwordHash) {
+        this(id, name, email, null, passwordHash);
+    }
+
+    /**
+     * Full constructor including the UUID identifier and phone number.
+     *
+     * @param id           Unique user identifier
+     * @param name         User's display name
+     * @param email        User's unique email address
+     * @param phoneNumber  User's contact phone number
+     * @param passwordHash Securely hashed password
+     */
+    public User(UUID id, String name, String email, String phoneNumber, String passwordHash) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.passwordHash = passwordHash;
     }
 
@@ -97,6 +127,14 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,6 +154,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }

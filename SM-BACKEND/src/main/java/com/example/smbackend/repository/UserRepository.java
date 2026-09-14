@@ -20,4 +20,20 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return An Optional containing the User if found, or empty Optional if not found
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Finds a User entity by its phone number.
+     *
+     * @param phoneNumber The phone number to look up
+     * @return An Optional containing the User if found, or empty Optional if not found
+     */
+    Optional<User> findByPhoneNumber(String phoneNumber);
+
+    /**
+     * Checks if a user exists with the given phone number.
+     *
+     * @param phoneNumber The phone number to check
+     * @return true if a user exists with the given phone number, false otherwise
+     */
+    boolean existsByPhoneNumber(String phoneNumber);
 }
