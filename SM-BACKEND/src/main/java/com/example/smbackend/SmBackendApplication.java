@@ -14,6 +14,7 @@ public class SmBackendApplication {
         SpringApplication.run(SmBackendApplication.class, args);
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
