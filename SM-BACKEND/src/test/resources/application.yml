@@ -11,3 +11,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# JWT configuration used during unit/integration tests
+jwt:
+  secret: dGVzdC1zZWNyZXQta2V5LWZvci1zbS1iYWNrZW5kLXVuaXQtdGVzdHMhISE=
+  expiration-ms: 3600000

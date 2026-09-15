@@ -6,16 +6,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * User domain entity mapped to the 'users' PostgreSQL table.
+ *
+ * <p>Implements {@link UserDetails} so this entity can be used directly as a
+ * Spring Security principal without an additional adapter class.
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -94,6 +102,70 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.passwordHash = passwordHash;
     }
+
+    // -------------------------------------------------------------------------
+    // UserDetails — Spring Security interface implementation
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the email address as the Spring Security username.
+     * Email is the unique login identifier for this application.
+     *
+     * @return the user's email address
+     */
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    /**
+     * Returns the BCrypt-hashed password stored in the database.
+     *
+     * @return hashed password string
+     */
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    /**
+     * Returns the authorities granted to this user.
+     * All registered users receive the {@code ROLE_USER} authority.
+     *
+     * @return list containing {@code ROLE_USER}
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    /** Account never expires. */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /** Account is never locked by the application. */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /** Credentials never expire. */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /** All registered accounts are considered enabled. */
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    // -------------------------------------------------------------------------
+    // Standard getters / setters
+    // -------------------------------------------------------------------------
 
     public UUID getId() {
         return id;
