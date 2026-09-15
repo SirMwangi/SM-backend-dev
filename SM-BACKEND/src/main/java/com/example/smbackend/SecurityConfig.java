@@ -1,4 +1,4 @@
-package com.example.smbackend.config;
+package com.example.smbackend;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +18,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin.disable())
