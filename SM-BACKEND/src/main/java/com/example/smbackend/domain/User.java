@@ -1,21 +1,31 @@
 package com.example.smbackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * User domain entity mapped to the 'users' PostgreSQL table.
+ *
+ * <p>Implements {@link UserDetails} so that Spring Security can use this entity
+ * directly as the authenticated principal throughout the security filter chain.
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,6 +38,7 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
@@ -135,7 +146,64 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    // ──────────────────────────────────────────────────────────────────────────
+    // UserDetails contract
+    // ──────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Returns the email address as the Spring Security username.
+     * All authentication lookups in {@link com.example.smbackend.config.ApplicationConfig}
+     * are keyed on email.
+     */
     @Override
+    public String getUsername() {
+        return email;
+    }
+
+    /**
+     * Returns the BCrypt-hashed password stored in {@code password_hash}.
+     * Annotated with {@link JsonIgnore} to prevent it from appearing in API responses.
+     */
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    /**
+     * Grants every user a single {@code ROLE_USER} authority.
+     * Extend this method when role-based access control (RBAC) is required.
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    /** Account expiry is not used — always returns {@code true}. */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /** Account locking is not used — always returns {@code true}. */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /** Credential expiry is not used — always returns {@code true}. */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /** Soft-deletion is not used — always returns {@code true}. */
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
